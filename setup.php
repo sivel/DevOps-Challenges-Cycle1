@@ -48,6 +48,10 @@ function waitForMany( $servers,  $state = 'ACTIVE', $timeout = 3600, $callback =
 	}
 }
 
+if ( ! file_exists( $_SERVER['HOME'] . '/.rackspace_cloud_credentials' ) ) {
+	printf("The required credentials file (%s) does not exist\n", $_SERVER['HOME'] . '/.rackspace_cloud_credentials');
+	exit(1);
+}
 // Parse the ini file
 $credentials = parse_ini_file( $_SERVER['HOME'] . '/.rackspace_cloud_credentials', true );
 
