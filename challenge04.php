@@ -25,6 +25,7 @@ require( 'setup.php' );
 
 $cloudfiles = $client->objectStoreService( 'cloudFiles', $options['r'] );
 
+// Try to get the container first, to tell if it exists
 try {
 	$cloudfiles->getContainer( $options['c'] );
 	echo "This container already exists. Cannot continue\n";
@@ -36,6 +37,7 @@ try {
 		echo $e->getResponse()->getMessage();
 		exit(1);
 	}
+	// If we made it here, create the container
 	printf( "Creating container: %s\n", $options['c'] );
 	$container = $cloudfiles->createContainer( $options['c'] );
 }

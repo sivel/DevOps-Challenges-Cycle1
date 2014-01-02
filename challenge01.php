@@ -32,6 +32,7 @@ $server->create( array(
 
 $adminPassword = $server->adminPass;
 
+// Wait for the server to become active, with a 300 second timeout
 $server->waitFor( 'ACTIVE', 300, 'status' );
 
 if ( $server->status() == 'ERROR' ) {

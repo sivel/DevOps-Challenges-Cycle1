@@ -22,10 +22,12 @@ $args = array(
 // Import the arg parsing file
 require( 'args.php' );
 
+// Make sure the SSH key exists
 if ( ! file_exists( $options['k'] ) ) {
 	printf("SSH Key (%s) does not exist\n", $options['k']);
 	exit(1)
 }
+// Read in the SSH key
 $sshkey = file_get_contents( $options['k'] );
 
 // Import the setup/auth file
@@ -37,7 +39,9 @@ echo "Starting build...\n";
 
 $servers = array();
 foreach ( range( 1, (int) $options['c'] ) as $i ) {
+	// Set the server name using printf
 	$name = sprintf($options['n'], $i);
+	// If the name didn't have printf formatting add the number to the end
 	if ( $name == $options['n'] ) {
 		$name = $options['n'] . $i;
 	}

@@ -8,6 +8,7 @@ require( 'setup.php' );
 $dns = $client->dnsService();
 $domains = $dns->domainList();
 
+// Print out a list of domains prefixed with a number for selection
 foreach ( $domains as $i => $domain ) {
 	printf( "%d) %s\n", (int) $i + 1, $domain->name() );
 }
@@ -40,6 +41,7 @@ $asyncResponse = $record->create(
 		'data' => $ipaddress
 	)
 );
+// Wait for the record to be created
 $asyncResponse->waitFor( 'COMPLETED', 300, False, 1);
 
 if ($asyncResponse->status() == 'ERROR') {
