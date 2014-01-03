@@ -18,6 +18,7 @@ require( 'args.php' );
 
 if ( ! is_dir( $options['d'] ) ) {
 	printf( "The directory (%s) does not exist\n", $options['d'] );
+	exit(1);
 }
 
 // Import the setup/auth file
