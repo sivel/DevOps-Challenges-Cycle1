@@ -5,6 +5,11 @@ require( 'args.php' );
 // Import the setup/auth file
 require( 'setup.php' );
 
+if ( ! check_region_svc( 'rax:dns', 'all', $regions ) ) {
+	printf( "You do not have access to Cloud DNS\n" );
+	exit(1);
+}
+
 $dns = $client->dnsService();
 $domains = $dns->domainList();
 

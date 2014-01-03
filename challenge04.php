@@ -23,6 +23,16 @@ if ( ! is_dir( $options['d'] ) ) {
 // Import the setup/auth file
 require( 'setup.php' );
 
+if ( ! check_region_svc( 'object-store', $options['r'], $regions ) ) {
+	printf( "You do not have access to object-store in region %s\n", $options['r'] );
+	exit(1);
+}
+
+if ( ! check_region_svc( 'rax:object-cdn', $options['r'], $regions ) ) {
+	printf( "You do not have access to rax:object-cdn in region %s\n", $options['r'] );
+	exit(1);
+}
+exit();
 $cloudfiles = $client->objectStoreService( 'cloudFiles', $options['r'] );
 
 // Try to get the container first, to tell if it exists

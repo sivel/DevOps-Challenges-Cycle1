@@ -48,6 +48,17 @@ function waitForMany( $servers,  $state = 'ACTIVE', $timeout = 3600, $callback =
 	}
 }
 
+/**
+ * Check to make sure that a service/region pair are available to the user
+ */
+function check_region_svc( $service, $region, $regions ) {
+	if ( isset( $regions[$region][$service] ) || isset( $regions['all'][$service] ) ) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
 if ( ! file_exists( $_SERVER['HOME'] . '/.rackspace_cloud_credentials' ) ) {
 	printf("The required credentials file (%s) does not exist\n", $_SERVER['HOME'] . '/.rackspace_cloud_credentials');
 	exit(1);
@@ -59,9 +70,23 @@ use OpenCloud\Rackspace;
 
 // Set up the identity client
 $client = new Rackspace( Rackspace::US_IDENTITY_ENDPOINT, array(
-    'username' => $credentials['rackspace_cloud']['username'],
-    'apiKey'   => $credentials['rackspace_cloud']['api_key']
+	'username' => $credentials['rackspace_cloud']['username'],
+	'apiKey'   => $credentials['rackspace_cloud']['api_key']
 ) );
 
 // Authenticate
 $client->authenticate();
+
+$regions = array();
+$catalog = $client->getCatalog();
+
+foreach ( $catalog->getItems() as $catalogItem ) {
+	if ( $catalogItem->getName() == 'cloudServers' ) {
+		continue;
+	}
+	$type = $catalogItem->getType();
+	foreach ( $catalogItem->getEndpoints() as $endpoint ) {
+		$region = empty( $endpoint->region ) ? 'all' : $endpoint->region;
+		$regions[$region][$type] = array();
+	}
+}

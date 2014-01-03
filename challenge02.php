@@ -33,6 +33,11 @@ $sshkey = file_get_contents( $options['k'] );
 // Import the setup/auth file
 require( 'setup.php' );
 
+if ( ! check_region_svc( 'compute', $options['r'], $regions ) ) {
+	printf( "You do not have access to compute in region %s\n", $options['r'] );
+	exit(1);
+}
+
 $compute = $client->computeService( 'cloudServersOpenStack', $options['r'] );
 
 echo "Starting build...\n";
